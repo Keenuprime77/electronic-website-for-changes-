@@ -39,7 +39,7 @@ const Hero = () => {
         <Image
           src="/watch for banner.png"
           width={400}
-          height={400}
+          height={402}
           alt="smart watch"
           className="max-md:w-[300px] max-md:h-[300px] max-sm:h-[250px] max-sm:w-[250px] w-auto h-auto"
         />
