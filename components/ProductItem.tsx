@@ -59,7 +59,7 @@ const ProductItem = ({
       <ProductItemRating productRating={product?.rating} />
       <Link
         href={`/product/${product?.slug}`}
-        className="block flex justify-center items-center w-full uppercase bg-transparent border-2 border-secondary px-0 py-2 text-base  font-bold text-black shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2"
+        className="block flex justify-center items-center w-full rounded-[34px] uppercase bg-transparent border-2 border-secondary px-0 py-2 text-base  font-bold text-black shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2"
       >
         <p>View product</p>
       </Link>

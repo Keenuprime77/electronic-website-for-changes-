@@ -28,10 +28,10 @@ const Hero = () => {
           </p>
           <div className="flex gap-x-1 max-lg:flex-col max-lg:gap-y-1">
             
-            <Link href="/product/smart-watch-demo" className="bg-transparent border-2 border-secondary text-white-600 font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-gray-100">
+            <Link href="/product/smart-watch-demo" className="bg-transparent rounded-[34px] border-2 border-secondary text-white-600 font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-gray-100">
             BUY NOW
           </Link>
-            <button className="bg-transparent border-2 border-secondary text-white-600 font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-gray-100">
+            <button className="bg-transparent border-2 border-secondary rounded-[34px] text-white-600 font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-gray-100">
               LEARN MORE
             </button>
           </div>

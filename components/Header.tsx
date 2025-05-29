@@ -83,6 +83,30 @@ const Header = () => {
           <div className="flex gap-x-10">
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="w-10">
+                <Image
+                  src="/randomuser.jpg"
+                  alt="random profile photo"
+                  width={30}
+                  height={30}
+                  className="w-full h-full rounded-full"
+                />
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a>Profile</a>
+                </li>
+                <li onClick={handleLogout}>
+                  <a href="#">Logout</a>
+                </li>
+              </ul>
+            </div>
+
+            
           </div>
         </div>
       )}
