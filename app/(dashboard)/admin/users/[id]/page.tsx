@@ -13,10 +13,12 @@ const DashboardSingleUserPage = ({
   params: { id },
 }: DashboardUserDetailsProps) => {
   const [userInput, setUserInput] = useState<{
+    firstname: string;
     email: string;
     newPassword: string;
     role: string;
   }>({
+    firstname: "",
     email: "",
     newPassword: "",
     role: "",
@@ -57,6 +59,7 @@ const DashboardSingleUserPage = ({
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            
             email: userInput.email,
             password: userInput.newPassword,
             role: userInput.role,
@@ -92,6 +95,7 @@ const DashboardSingleUserPage = ({
       })
       .then((data) => {
         setUserInput({
+          firstname:data?.firstname,
           email: data?.email,
           newPassword: "",
           role: data?.role,
@@ -104,6 +108,21 @@ const DashboardSingleUserPage = ({
       <DashboardSidebar />
       <div className="flex flex-col gap-y-7 xl:pl-5 max-xl:px-5 w-full">
         <h1 className="text-3xl font-semibold">User details</h1>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">Email:</span>
+            </div>
+            <input
+              type="name"
+              className="input input-bordered w-full max-w-xs"
+              value={userInput.firstname}
+              onChange={(e) =>
+                setUserInput({ ...userInput, firstname: e.target.value })
+              }
+            />
+          </label>
+        </div>
         <div>
           <label className="form-control w-full max-w-xs">
             <div className="label">

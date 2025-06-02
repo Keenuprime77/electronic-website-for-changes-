@@ -22,7 +22,7 @@ const HeartElement = ({wishQuantity}: {wishQuantity: number}) => {
 
         <FaHeart className="text-2xl text-black" />
       </div>
-        <span className="block w-6 h-6 font-bold bg-primary text-white rounded-full flex justify-center items-center absolute top-[-12px] right-[-22px]">
+        <span className="block w-6 h-6 font-bold bg-primary text-white rounded-full flex justify-center items-center absolute top-[-17px] right-[-22px]">
           { wishQuantity }
         </span>
       </Link>

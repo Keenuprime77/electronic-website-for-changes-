@@ -16,10 +16,10 @@ const UserProfile = ({
   }: DashboardUserDetailsProps) => {
     const [userInput, setUserInput] = useState<{
         email: string;
-        
+        newPassword:string;
       }>({
         email: "",
-        
+        newPassword:"",
       });
       const router = useRouter();
 
@@ -69,7 +69,7 @@ const UserProfile = ({
           .then((data) => {
             setUserInput({
               email: data?.email,
-              
+              newPassword:data?.email,
             });
           });
       }, [id]);

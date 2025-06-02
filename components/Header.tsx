@@ -15,7 +15,7 @@ import HeaderTop from "./HeaderTop";
 import Image from "next/image";
 import SearchInput from "./SearchInput";
 import Link from "next/link";
-import { FaBell } from "react-icons/fa6";
+import { FaBell, FaHeart, FaUser } from "react-icons/fa6";
 
 import CartElement from "./CartElement";
 import HeartElement from "./HeartElement";
@@ -84,14 +84,15 @@ const Header = () => {
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="w-10">
-                <Image
+              <div tabIndex={0} role="button"  className="mt-[12%] w-10">
+                {/* <Image
                   src="/randomuser.jpg"
                   alt="random profile photo"
                   width={30}
                   height={30}
                   className="w-full h-full rounded-full"
-                />
+                /> */}
+                <FaUser className="text-2xl text-black" />
               </div>
               <ul
                 tabIndex={0}
@@ -125,13 +126,7 @@ const Header = () => {
             <FaBell className="text-xl" />
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10">
-                <Image
-                  src="/randomuser.jpg"
-                  alt="random profile photo"
-                  width={30}
-                  height={30}
-                  className="w-full h-full rounded-full"
-                />
+              <FaUser className="text-2xl text-black" />
               </div>
               <ul
                 tabIndex={0}
@@ -140,9 +135,7 @@ const Header = () => {
                 <li>
                   <Link href="/admin">Dashboard</Link>
                 </li>
-                <li>
-                  <a>Profile</a>
-                </li>
+                
                 <li onClick={handleLogout}>
                   <a href="#">Logout</a>
                 </li>
