@@ -25,7 +25,7 @@ const IntroducingSection = () => {
           <p className="text-white text-center text-2xl font-semibold max-md:text-xl max-[480px]:text-base">
             The best electronics for tech lovers.
           </p>
-          <Link href="/shop" className="bg-transparent border-2 rounded-[34px] border-secondary block text-secondary  font-bold px-12 py-3 text-xl hover:bg-gray-100 w-96 mt-2  max-md:text-lg max-md:w-72 max-[480px]:w-60 mx-auto">
+          <Link href="/shop" className="bg-secondary border-2 rounded-[34px] border-primary block text-tertiary  font-bold px-12 py-3 text-xl hover:text-secondary hover:bg-tertiary w-96 mt-2  max-md:text-lg max-md:w-72 max-[480px]:w-60 mx-auto">
             SHOP NOW
           </Link>
         </div>

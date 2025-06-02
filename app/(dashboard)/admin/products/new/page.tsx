@@ -267,7 +267,7 @@ const AddNewProduct = () => {
           <button
             onClick={addProduct}
             type="button"
-            className="w-[21%] uppercase bg-primary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-secondary hover:text-white focus:outline-none focus:ring-2"
+            className="w-[21%] uppercase rounded-[37px] bg-secondary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
           >
             {loading ? <div
               className="spinner"

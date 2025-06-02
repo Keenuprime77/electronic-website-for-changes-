@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 
 export const POST = async (request: any) => {
-  const { email, password } = await request.json();
+  const { firstname, lastname, email, password, address, phone,role } = await request.json();
 
   const existingUser = await prisma.user.findFirst({ where: { email } });
 
@@ -18,8 +18,13 @@ export const POST = async (request: any) => {
     await prisma.user.create({
       data: {
         id: nanoid() + "",
+        firstname,
+        lastname,
         email,
         password: hashedPassword,
+        address,
+        phone,
+        role,
       },
     });
     return new NextResponse("user is registered", { status: 200 });

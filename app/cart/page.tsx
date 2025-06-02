@@ -183,7 +183,7 @@ const CartPage = () => {
                 <div className="mt-6">
                   <Link
                     href="/checkout"
-                    className="block flex justify-center items-center w-full uppercase bg-white px-4 py-3 text-base border border-black border-gray-300 font-bold text-primary shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2"
+                    className="block flex justify-center items-center w-full uppercase bg-white px-4 py-3 text-base border border-black border-gray-300 font-bold text-secondary shadow-sm hover:bg-black hover:bg-gray-100 focus:outline-none focus:ring-2"
                   >
                     <span>Checkout</span>
                   </Link>

@@ -57,7 +57,8 @@ const DashboardProductTable = () => {
               <th>Product</th>
               <th>Stock Availability</th>
               <th>Price</th>
-              <th></th>
+              <th>details</th>
+              <th>quantity</th>
             </tr>
           </thead>
           <tbody>

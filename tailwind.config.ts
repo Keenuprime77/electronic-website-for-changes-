@@ -11,7 +11,8 @@ const config: Config = {
       colors: {
         'custom-yellow':'#FED700',
         'primary':'#03A9F4',
-        'secondary':'#00344D',
+        'secondary':'red',
+        'tertiary':'white'
       }
     },
   },  

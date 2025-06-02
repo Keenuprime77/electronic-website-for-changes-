@@ -98,7 +98,7 @@ const Header = () => {
                 className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a>Profile</a>
+                  <Link href="/Userprofile">Profile</Link>
                 </li>
                 <li onClick={handleLogout}>
                   <a href="#">Logout</a>
@@ -149,7 +149,9 @@ const Header = () => {
               </ul>
             </div>
           </div>
+
         </div>
+        
       )}
     </header>
   );

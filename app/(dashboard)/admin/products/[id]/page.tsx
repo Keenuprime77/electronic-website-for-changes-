@@ -321,13 +321,13 @@ const DashboardProductDetails = ({
           <button
             type="button"
             onClick={updateProduct}
-            className="uppercase bg-primary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-secondary hover:text-white focus:outline-none focus:ring-2"
+            className="uppercase rounded-[37px] bg-secondary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
           >
           Update product
           </button>
           <button
             type="button"
-            className="uppercase bg-primary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-white shadow-sm hover:bg-secondary hover:text-white focus:outline-none focus:ring-2"
+            className="uppercase rounded-[37px] bg-secondary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
             onClick={deleteProduct}
           >
             Delete product

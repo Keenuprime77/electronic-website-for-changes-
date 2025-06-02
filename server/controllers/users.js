@@ -13,13 +13,18 @@ async function getAllUsers(request, response) {
 
 async function createUser(request, response) {
   try {
-    const { email, password, role } = request.body;
+    console.log("Request body:", request.body);
+    const { firstname, lastname, email, password, address, phone, role, } = request.body;
     const hashedPassword = await bcrypt.hash(password, 5);
 
     const user = await prisma.user.create({
       data: {
+        firstname,
+        lastname,
         email,
         password: hashedPassword,
+        address,
+        phone,
         role,
       },
     });
@@ -33,7 +38,7 @@ async function createUser(request, response) {
 async function updateUser(request, response) {
   try {
     const { id } = request.params;
-    const { email, password, role } = request.body;
+    const { firstname, lastname, email, password, address, phone, role, } = request.body;
     const hashedPassword = await bcrypt.hash(password, 5);
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -50,8 +55,12 @@ async function updateUser(request, response) {
         id: existingUser.id,
       },
       data: {
+        firstname,
+        lastname,
         email,
         password: hashedPassword,
+        address,
+        phone,
         role,
       },
     });

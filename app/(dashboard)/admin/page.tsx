@@ -13,7 +13,7 @@ const AdminDashboardPage = () => {
           <StatsElement />
           <StatsElement />
         </div>
-        <div className="w-full bg-primary text-white h-40 flex flex-col justify-center items-center gap-y-2">
+        <div className="w-full bg-primary rounded-[9px] text-white h-40 flex flex-col justify-center items-center gap-y-2">
           <h4 className="text-3xl text-gray-100 max-[400px]:text-2xl">
             Number of visitors today
           </h4>

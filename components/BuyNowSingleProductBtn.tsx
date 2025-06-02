@@ -38,7 +38,7 @@ const BuyNowSingleProductBtn = ({
   return (
     <button
       onClick={handleAddToCart}
-      className="btn w-[200px] text-lg border border-primary hover:border-primary border-1 font-normal bg-primary text-white hover:bg-white hover:scale-110 hover:text-primary transition-all uppercase ease-in max-[500px]:w-full"
+      className="btn w-[200px] text-lg border border-secondary hover:border-secondary border-1 font-normal bg-secondary text-white hover:bg-tertiary hover:scale-110 hover:text-secondary transition-all uppercase ease-in max-[500px]:w-full"
     >
       Buy Now
     </button>

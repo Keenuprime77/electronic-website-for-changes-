@@ -21,7 +21,7 @@ import Link from "next/link";
 
 const DashboardSidebar = () => {
   return (
-    <div className="xl:w-[400px] bg-primary h-full max-xl:w-full">
+    <div className="xl:w-[400px] bg-primary rounded-[18px] h-full max-xl:w-full">
       <Link href="/admin">
         <div className="flex gap-x-2 w-full hover:bg-primary cursor-pointer items-center py-6 pl-5 text-xl text-white">
           <MdDashboard className="text-2xl" />{" "}
