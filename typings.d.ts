@@ -47,8 +47,12 @@ interface Category {
 
 interface User {
   id: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string | null;
+  address: string | null;
+  phone: string | null;
   role: string;
 }
 

@@ -2,42 +2,252 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities{
+@layer utilities {
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
+  }
 }
 
 .spinner {
-  @apply block mx-auto h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite];
+  @apply block mx-auto h-8 w-8 animate-spin rounded-full border-4 border-solid border-red-500 border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite];
 }
 
 
 :root {
-  --primary: #18ed1b;
-  --secondary: green;
+	--hue: 223;
+	--bg: hsl(var(--hue),10%,90%);
+	--fg: hsl(var(--hue),10%,10%);
+	--primary: hsl(var(--hue),90%,55%);
+	--trans-dur: 0.3s;
+	
+}
+/* body {
+	background-color: var(--bg);
+	color: var(--fg);
+	font: 1em/1.5 "DM Sans", sans-serif;
+	height: 100vh;
+	display: grid;
+	place-items: center;
+	transition:
+		background-color var(--trans-dur),
+		color var(--trans-dur);
+} */
+ 
+.loader-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	backdrop-filter: blur(px);
+	background-color: rgba(255, 255, 255, 0.5); /* for light mode */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: black;
+  }
+  
+
+   @media (prefers-color-scheme: dark) {
+	.loader-overlay {
+	  background-color: rgba(247, 238, 238, 0.822);
+	}
+  } 
+  
+
+.preloader {
+  display: block;
+  margin: auto;
+	text-align: center;
+	max-width: 20em;
+	width: 100%;
+}
+.preloader__text {
+	position: relative;
+	height: 1.5em;
+}
+.preloader__msg {
+	animation: msg 0.3s 13.7s linear forwards;
+	position: absolute;
+	width: 100%;
+}
+.preloader__msg--last {
+	animation-direction: reverse;
+	animation-delay: 14s;
+	visibility: hidden;
+}
+.cart {
+	display: block;
+	margin: 0 auto 1.5em auto;
+	width: 8em;
+	height: 8em;
+}
+.cart__lines,
+.cart__top,
+.cart__wheel1,
+.cart__wheel2,
+.cart__wheel-stroke {
+	animation: cartLines 2s ease-in-out infinite;
+}
+.cart__lines {
+	stroke: var(--primary);
+}
+.cart__top {
+	animation-name: cartTop;
+}
+.cart__wheel1 {
+	animation-name: cartWheel1;
+	transform: rotate(-0.25turn);
+	transform-origin: 43px 111px;
+}
+.cart__wheel2 {
+	animation-name: cartWheel2;
+	transform: rotate(0.25turn);
+	transform-origin: 102px 111px;
+}
+.cart__wheel-stroke {
+	animation-name: cartWheelStroke
+}
+.cart__track {
+	stroke: hsla(var(--hue),10%,10%,0.1);
+	transition: stroke var(--trans-dur);
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: hsl(var(--hue),10%,10%);
+		--fg: hsl(var(--hue),10%,90%);
+	}
+	.cart__track {
+		stroke: hsla(var(--hue),10%,90%,0.1);
+	}
+}
+
+/* Animations */
+@keyframes msg {
+	from {
+		opacity: 1;
+		visibility: visible;
+	}
+	99.9% {
+		opacity: 0;
+		visibility: visible;
+	}
+	to {
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+@keyframes cartLines {
+	from,
+	to {
+		opacity: 0;
+	}
+	8%,
+	92% {
+		opacity: 1;
+	}
+}
+@keyframes cartTop {
+	from {
+		stroke-dashoffset: -338;
+	}
+	50% {
+		stroke-dashoffset: 0;
+	}
+	to {
+		stroke-dashoffset: 338;
+	}
+}
+@keyframes cartWheel1 {
+	from {
+		transform: rotate(-0.25turn);
+	}
+	to {
+		transform: rotate(2.75turn);
+	}
+}
+@keyframes cartWheel2 {
+	from {
+		transform: rotate(0.25turn);
+	}
+	to {
+		transform: rotate(3.25turn);
+	}
+}
+@keyframes cartWheelStroke {
+	from,
+	to {
+		stroke-dashoffset: 81.68;
+	}
+	50% {
+		stroke-dashoffset: 40.84;
+	}
+} 
+
+
+
+:root {
+  --primary: #184aed;
+  --secondary: rgb(0, 51, 128);
 }
 
 
-.range{
-    --range-shdw: var(--primary);
+
+.range {
+  --range-shdw: var(--primary);
 }
 
-.checkbox:checked, .checkbox[checked="true"], .checkbox[aria-checked="true"] {
-    background-repeat: no-repeat;
-    animation: checkmark var(--animation-input, 0.2s) ease-out;
-    background-color: var(--primary);
-    background-image: linear-gradient(-45deg, transparent 65%, var(--primary) 65.99%),
-      linear-gradient(45deg, transparent 75%, var(--primary) 75.99%),
-      linear-gradient(-45deg, var(--primary) 40%, transparent 40.99%),
-      linear-gradient(
-        45deg,
-        var(--primary) 30%,
-        white 30.99%,
-        white 40%,
-        transparent 40.99%
-      ),
-      linear-gradient(-45deg, white 50%, var(--primary) 50.99%);
+.checkbox:checked,
+.checkbox[checked="true"],
+.checkbox[aria-checked="true"] {
+  background-repeat: no-repeat;
+  animation: checkmark var(--animation-input, 0.2s) ease-out;
+  background-color: var(--primary);
+  background-image: linear-gradient(-45deg, transparent 65%, var(--primary) 65.99%),
+    linear-gradient(45deg, transparent 75%, var(--primary) 75.99%),
+    linear-gradient(-45deg, var(--primary) 40%, transparent 40.99%),
+    linear-gradient(45deg,
+      var(--primary) 30%,
+      white 30.99%,
+      white 40%,
+      transparent 40.99%),
+    linear-gradient(-45deg, white 50%, var(--primary) 50.99%);
+}
+
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 700px;
+  width: 100%;
+}
+
+.wrapper:hover .item{
+  animation-play-state: paused;
+}
+
+.item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  animation: slideInOut 20s infinite;
+  animation-timing-function: ease-in-out;
+  opacity: 0;
+}
+
+.item1 { animation-delay: 0s; }
+.item2 { animation-delay: 5s; }
+.item3 { animation-delay: 10s; }
+.item4 { animation-delay: 15s; }
+
+@keyframes slideInOut {
+  0% { transform: translateX(100%); opacity: 0; }
+  5% { transform: translateX(0); opacity: 1; }
+  25% { transform: translateX(0); opacity: 1; }
+  30% { transform: translateX(-100%); opacity: 0; }
+  100% { transform: translateX(-100%); opacity: 0; }
 }

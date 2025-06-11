@@ -431,7 +431,7 @@ const AdminSingleOrder = () => {
           <div className="flex gap-x-2 max-sm:flex-col mt-5">
             <button
               type="button" disabled={loading}
-              className="w-[18%] uppercase bg-secondary rounded-[37px] px-10 py-5 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
+              className="w-[22%] uppercase bg-secondary rounded-[37px] px-10 py-3 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
               onClick={updateOrder}
             >
               {loading ? <div
@@ -446,7 +446,7 @@ const AdminSingleOrder = () => {
             </button>
             <button
               type="button" disabled={dloading}
-              className="w-[18%] uppercase rounded-[37px] bg-secondary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
+              className="w-[22%] uppercase rounded-[37px] bg-secondary px-10 py-3 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
               onClick={deleteOrder}
             >
               {dloading ? <div

@@ -1,5 +1,6 @@
 import { CategoryMenu, Hero, Incentives, IntroducingSection, Newsletter, ProductsSection } from "@/components";
 
+
 export default function Home() {
   return (
     <>
@@ -7,6 +8,8 @@ export default function Home() {
     <IntroducingSection />
     <CategoryMenu />
     <ProductsSection />
+    <Newsletter></Newsletter>
+    <Incentives></Incentives>
     </>
   );
 }

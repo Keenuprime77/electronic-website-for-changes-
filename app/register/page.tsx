@@ -86,144 +86,34 @@ const RegisterPage = () => {
   };
 
   if (sessionStatus === "loading") {
-    return <h1>Loading...</h1>;
+    return <>
+    <div className="preloader">
+	<svg className="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128" width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
+		<g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+			<g className="cart__track" stroke="hsla(0,10%,10%,0.1)">
+				<polyline points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" />
+				<circle cx="43" cy="111" r="13" />
+				<circle cx="102" cy="111" r="13" />
+			</g>
+			<g className="cart__lines" stroke="currentColor">
+				<polyline className="cart__top" points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" stroke-dasharray="338 338" stroke-dashoffset="-338" />
+				<g className="cart__wheel1" transform="rotate(-90,43,111)">
+					<circle className="cart__wheel-stroke" cx="43" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
+				</g>
+				<g className="cart__wheel2" transform="rotate(90,102,111)">
+					<circle className="cart__wheel-stroke" cx="102" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
+				</g>
+			</g>
+		</g>
+	</svg>
+	<div className="preloader__text">
+		<p className="preloader__msg">Bringing you the goods…</p>
+		<p className="preloader__msg preloader__msg--last">This is taking long. Something’s wrong.</p>
+	</div>
+</div></>;
   }
 
-  // const [error, setError] = useState("");
 
-  // const { data: session, status: sessionStatus } = useSession();
-
-  // // useEffect(() => {
-  // //   // chechking if user has already registered redirect to home page
-  // //   if (sessionStatus === "authenticated") {
-  // //     router.replace("/");
-  // //   }
-  // // }, [router, sessionStatus]);
-
-
-  // const [checkoutForm, setCheckoutForm] = useState({
-  //   firstname: "",
-  //   lastname: "",
-  //   phone: "",
-  //   email: "",
-  //   password: "",
-  //   confirmPassword: "",
-  //   address: "",
-  // });
-  // const {  clearCart } = useProductStore();
-
-
-  // const makePurchase = async (e: { preventDefault: () => void; }) => {
-  //   e.preventDefault()
-  //     // sending API request for creating a order
-  //     const response = await fetch("/api/register", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         firstname: checkoutForm.firstname,
-  //         lastname: checkoutForm.lastname,
-  //         phone: checkoutForm.phone,
-  //         email: checkoutForm.email,
-  //         password:checkoutForm.password,
-  //         address: checkoutForm.address,
-  //       }),
-  //     })
-  //       .then(async (res) => {
-
-  //         if (!res.ok) {
-  //           const errorData = await res.json();
-  //           throw new Error(errorData.error || 'Something went wrong');
-  //         }
-  //         return res.json()
-  //       })
-  //       .then(() => {
-  //         setCheckoutForm({
-  //           firstname: "",
-  //           lastname: "",
-  //           phone: "",
-  //           email: "",
-  //           password:"",
-  //           confirmPassword:"",
-  //           address: "",
-
-  //         });
-  //         clearCart();
-  //         toast.success("Order created successfuly");
-
-  //       }).catch(err => {
-  //         alert(`Order failed: ${err.message}`);
-  //         console.log(`order msg:${err.message}`)
-
-  //       });
-  //   } 
-
-
-  // const handleSubmit = async (e: any) => {
-  //   e.preventDefault();
-  //   const name = e.target.name.value;
-  //   const lastname = e.target.lastname.value;
-  //   const email = e.target.email.value;
-  //   const password = e.target.password.value;
-  //   const confirmPassword = e.target.confirmpassword.value;
-  //   const address = e.target.address.value;
-  //   const phone = e.target.phone.value;
-
-  //   if (!isValidEmail(email)) {
-  //     setError("Email is invalid");
-  //     toast.error("Email is invalid");
-  //     return;
-  //   }
-
-  //   if (!password || password.length < 8) {
-  //     setError("Password is invalid");
-  //     toast.error("Password is invalid");
-  //     return;
-  //   }
-
-  //   if (confirmPassword !== password) {
-  //     setError("Passwords are not equal");
-  //     toast.error("Passwords are not equal");
-  //     return;
-  //   }
-
-  //   try {
-  //     // sending API request for registering user
-  //     const res = await fetch("/api/register", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         name,
-  //         lastname,
-  //         email,
-  //         password,
-  //         address,
-  //         phone,
-  //       }),
-  //     });
-
-  //     if (res.status === 400) {
-  //       toast.error("This email is already registered");
-  //       setError("The email already in use");
-  //     }
-  //     if (res.status === 200) {
-  //       setError("");
-  //       toast.success("Registration successful");
-  //       router.push("/login");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error, try again");
-  //     setError("Error, try again");
-  //     console.log(error);
-  //   }
-  // };
-
-  // if (sessionStatus === "loading") {
-  //   return <h1>Loading...</h1>;
-  // }
 
   return (
     <div className="bg-white">
@@ -391,12 +281,7 @@ const RegisterPage = () => {
               </div>
 
               <div>
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-
-                  className="w-full rounded-md border border-transparent bg-secondary px-20 py-2 text-lg font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
-                >submit</button>
+               
                 <CustomButton
                   buttonType="submit"
                   text="Sign up"

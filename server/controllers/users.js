@@ -71,6 +71,8 @@ async function updateUser(request, response) {
   }
 }
 
+
+
 async function deleteUser(request, response) {
   try {
     const { id } = request.params;

@@ -6,7 +6,10 @@ import SessionProvider from "@/utils/SessionProvider";
 import Providers from "@/Providers";
 import { getServerSession } from "next-auth";
 import 'svgmap/dist/svgMap.min.css';
-
+import RouteChangeHandler from '@/components/RouteChangeHandler';
+import LinkInterceptor from '@/components/LinkInterceptor';
+import { LoaderProvider } from '@/context/LoaderContext';
+import Loading from '@/components/loading';
 
 
 
@@ -27,10 +30,16 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <body className={inter.className}>
+        
       <SessionProvider session={session}>
         <Header />
         <Providers>
+      <LoaderProvider>
+      <LinkInterceptor />
+      <RouteChangeHandler />
+      <Loading/>
         {children}
+        </LoaderProvider>
         </Providers>
         <Footer />
       </SessionProvider>

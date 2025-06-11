@@ -8,10 +8,37 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { isValidEmailAddressFormat, isValidNameOrLastname, isValidPhoneFormat } from "@/lib/utils";
+import { useSession } from 'next-auth/react';
 
 const CheckoutPage = () => {
   const [loading, setLoading] = useState(false);
+  const { data: session, status } = useSession();
 
+  const [user, setUser] = useState({
+    address: '',
+  });
+
+  const getUserByEmail = async () => {
+    if (session?.user?.email) {
+      fetch(`http://localhost:3001/api/users/email/${session?.user?.email}`, {
+        cache: "no-store",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // (data?.id);
+          setUser(data)
+        });
+    }
+  };
+
+  useEffect(() => {
+    getUserByEmail();
+  }, [session?.user?.email]);
+
+  const handleAddress=(e)=>{
+    e.preventDefault();
+setCheckoutForm({...checkoutForm,adress:user.address})
+  }
   
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
@@ -468,6 +495,9 @@ const CheckoutPage = () => {
                         })
                       }
                     />
+                   
+                    
+                    <button className=" rounded-md border border-transparent bg-secondary  px-10 py-2 my-1 text-md font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last" onClick={(e)=>handleAddress(e)} >Default Address</button>
                   </div>
                 </div>
 
@@ -602,7 +632,7 @@ const CheckoutPage = () => {
                 type="button"
                 onClick={makePurchase}
                 disabled={loading}
-                className="w-full rounded-md border border-transparent bg-secondary px-20 py-2 text-lg font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
+                className=" w-full rounded-md border border-transparent bg-secondary px-20 py-2 text-lg font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
               >
                  {loading?<div
                   className="spinner"
