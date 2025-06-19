@@ -17,6 +17,7 @@ import { FaHeadphones } from "react-icons/fa6";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa6";
+import SimpleSlider from "./SimpleSlider";
 
 const HeaderTop = () => {
   // const { data: session }: any = useSession();
@@ -66,7 +67,9 @@ const HeaderTop = () => {
     //     </ul>
     //   </div>
     // </div>
-<></>
+<>
+ {/* <SimpleSlider></SimpleSlider> */}
+ </>
   )
 };
 

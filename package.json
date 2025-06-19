@@ -19,6 +19,7 @@
     "express-fileupload": "^1.5.0",
     "flowbite-react": "^0.7.2",
     "libphonenumber-js": "^1.12.8",
+    "mysql2": "^3.14.1",
     "nanoid": "^5.0.6",
     "next": "14.1.0",
     "next-auth": "^4.24.6",
@@ -30,6 +31,8 @@
     "react-international-phone": "^4.5.0",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "svgmap": "^2.10.1",
     "zod": "^3.22.4",
     "zustand": "^4.5.1"

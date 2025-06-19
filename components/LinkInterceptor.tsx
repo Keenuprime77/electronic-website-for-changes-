@@ -10,27 +10,28 @@ export default function LinkInterceptor() {
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const anchor = target.closest('a');
-
+      const targetEl = (e.target as HTMLElement).closest('a');
       if (
-        anchor &&
-        anchor.href &&
-        anchor.origin === window.location.origin &&
-        !anchor.hasAttribute('data-no-loader') &&
-        !anchor.target // skip external/tab links
+        !targetEl ||
+        targetEl.target === '_blank' ||
+        targetEl.hasAttribute('data-no-loader') ||
+        !targetEl.href.startsWith(window.location.origin)
       ) {
-        // Prevent default behavior
-        e.preventDefault();
-
-        // Show loader
-        show();
-
-        // Let router navigate after a short delay (smooth animation)
-        setTimeout(() => {
-          router.push(anchor.pathname + anchor.search + anchor.hash);
-        }, 100); // optional delay
+        return; // external, new-tab, or opted-out link
       }
+
+      // Compute paths+hashes
+      const current = window.location.pathname + window.location.hash;
+      const href    = new URL(targetEl.getAttribute('href')!, window.location.origin);
+      const target  = href.pathname + href.hash;
+
+      // 👉 If clicking to the exact same route+hash, do nothing:
+      if (target === current) return;
+
+      // Otherwise intercept, show loader, then navigate
+      e.preventDefault();
+      show();
+      router.push(href.pathname + href.search + href.hash);
     };
 
     document.addEventListener('click', handleClick);

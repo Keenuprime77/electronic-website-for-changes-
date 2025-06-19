@@ -17,7 +17,7 @@ import { useProductStore } from "@/app/_zustand/store";
 const CartElement = () => {
     const { allQuantity } = useProductStore();
   return (
-    <div className="relative">
+    <div className="relative active:animate-pop">
             <Link href="/cart">
             <div className='pt-[6px]'>
 

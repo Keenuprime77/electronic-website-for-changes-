@@ -10,6 +10,7 @@ import RouteChangeHandler from '@/components/RouteChangeHandler';
 import LinkInterceptor from '@/components/LinkInterceptor';
 import { LoaderProvider } from '@/context/LoaderContext';
 import Loading from '@/components/loading';
+import OrderStatusNotification from './Notification/page';
 
 
 
@@ -38,6 +39,7 @@ export default async function RootLayout({
       <LinkInterceptor />
       <RouteChangeHandler />
       <Loading/>
+   
         {children}
         </LoaderProvider>
         </Providers>

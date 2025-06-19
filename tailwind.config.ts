@@ -8,11 +8,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        pop: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        pop: 'pop 0.3s ease-in-out',
+      },
       colors: {
         'custom-yellow':'#FED700',
         'primary':'#03A9F4',
         'secondary':'red',
-        'tertiary':'white'
+        'tertiary':'white',
+        'animation-button':''
       }
     },
   },  

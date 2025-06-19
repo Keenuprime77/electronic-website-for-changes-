@@ -16,7 +16,7 @@ import { FaHeart } from "react-icons/fa6";
 
 const HeartElement = ({wishQuantity}: {wishQuantity: number}) => {
   return (
-    <div className="relative">
+    <div className="relative active:animate-pop">
       <Link href="/wishlist">
       <div className="pt-[6px]">
 

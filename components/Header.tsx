@@ -22,6 +22,7 @@ import HeartElement from "./HeartElement";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useWishlistStore } from "@/app/_zustand/wishlistStore";
+import NotificationElement from "./NotifictionElement";
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -77,13 +78,14 @@ const Header = () => {
       {pathname.startsWith("/admin") === false && session && (
         <div className="h-32 bg-white flex items-center justify-between px-16 max-[1320px]:px-16 max-md:px-6 max-lg:flex-col max-lg:gap-y-7 max-lg:justify-center max-lg:h-60 max-w-screen-2xl mx-auto">
           <Link href="/">
-            <img src="/logo v1 red.png" width={300} height={300} alt="singitronic logo" className="relative right-5 max-[1023px]:w-56" />
+            <img src="/logo v1 red.png" width={300} height={300} alt="singitronic logo" className="relative right-5 max-[1023px]:w-56 active:animate-pop "/>
           </Link>
           <SearchInput />
           <div className="flex gap-x-10">
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
-            <div className="dropdown dropdown-end">
+            <NotificationElement/>
+            <div className="dropdown dropdown-end active:animate-pop">
               <div tabIndex={0} role="button"  className="mt-[12%] w-10">
                 {/* <Image
                   src="/randomuser.jpg"
@@ -92,7 +94,7 @@ const Header = () => {
                   height={30}
                   className="w-full h-full rounded-full"
                 /> */}
-                <FaUser className="text-2xl text-black" />
+                <FaUser className="text-2xl text-black " />
               </div>
               <ul
                 tabIndex={0}
@@ -116,6 +118,7 @@ const Header = () => {
           </Link>
           <SearchInput />
           <div className="flex gap-x-10">
+          
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
             <div className="dropdown dropdown-end">
@@ -163,7 +166,7 @@ const Header = () => {
           <div className="flex gap-x-5 items-center">
             <FaBell className="text-xl" />
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="w-10">
+              <div tabIndex={0} role="button" className="w-10 active:animate-pop">
               <FaUser className="text-2xl text-black" />
               </div>
               <ul
