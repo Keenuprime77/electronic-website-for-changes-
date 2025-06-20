@@ -1,141 +1,127 @@
 'use client';
+import { SectionTitle } from '@/components';
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:3001');
+import { useNotificationStore } from '@/app/_zustand/useNotification';
 
-interface OrderNotification {
-  orderId: number;
-  newStatus: string;
-  name: string;
+interface Notification {
+  id: number;
+  order_id: number;
+  customer_name: string;
+  status: string;
   total: number;
+  created_at: string;
 }
 
 export default function OrderStatusNotification() {
-  const [notifications, setNotifications] = useState<OrderNotification[]>([]);
- 
+
+
+  const notifications = useNotificationStore((state) => state.notifications);
+  const setNotifications = useNotificationStore((state) => state.setNotifications);
+  const addNotification = useNotificationStore((state) => state.addNotification);
+  const deleteNotificationFromStore = useNotificationStore((state) => state.deleteNotification);
+
 
   useEffect(() => {
-    socket.on('orderStatusChanged', (data: OrderNotification) => {
-      setNotifications((prev) => [...prev, data]);
+    socket.on('orderStatusChanged',()=>{
+      fetch('http://localhost:3001/api/notifications')
+      .then((res)=>res.json())
+      .then((data)=>setNotifications(data));
     });
+    return()=>{socket.off('orderStatusChanged')};
+  }, []);
 
+  
+  useEffect(() => {
+    socket.on('orderStatusChanged', (data) => {
+      addNotification(
+        {
+          id: Date.now(),
+          order_id: data.orderId,
+          customer_name: data.customer,
+          status: data.newStatus,
+          total: data.total,
+          created_at: new Date().toLocaleString(),
+        },
+      );
+    });
     return () => {
       socket.off('orderStatusChanged');
     };
   }, []);
 
-  
-  const clearNotifications = () => setNotifications([]);
+  const deleteNotification = async (id: number) => {
+    const res = await fetch(`http://localhost:3001/api/notifications/${id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      deleteNotificationFromStore(id);
+    }
+  };
+
 
   return (
-  
-<div className="xl:ml-5 w-full max-xl:mt-5 ">
-      <h1 className="text-3xl font-semibold text-center mb-5">Notification</h1>
-      <div className="overflow-x-auto">
-        <table className="table table-md table-pin-cols">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <th>Order ID</th>
-              <th>Name and country</th>
-              <th>Status</th>
-              <th>Subtotal</th>
-              <th>Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* row 1 */}
-            {
-              notifications.map((order,idx) => (
-                <tr key={idx}>
-                  <th>
-                    <label>
-                      <input type="checkbox" className="checkbox" />
-                    </label>
-                  </th>
+    <>
+      <SectionTitle title={'Notification'} path={'Home | Notification'} ></SectionTitle>
+      <div className="xl:ml-5 w-full max-xl:mt-5 ">
+        {notifications.length == 0 ? <h1 className="text-3xl font-semibold text-center mb-5"> No Notifications</h1> :
+          <div className="overflow-x-auto">
+            <table className="table table-md table-pin-cols">
+              {/* head */}
+              <thead>
+                <tr>
 
-                  <td>
-                    <div>
-                      <p className="font-bold">#{order?.orderId}</p>
-                    </div>
-                  </td>
+                  <th>Order ID</th>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>Subtotal</th>
+                  <th>Date</th>
 
-                  <td>
-                    <div className="flex items-center gap-5">
-                      <div>
-                        <div className="font-bold">{order?.name}</div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span className="badge badge-success text-white badge-sm">
-                      {order?.newStatus}
-                    </span>
-                  </td>
-
-                  <td>
-                    <p>${order?.total}</p>
-                  </td>
-
-                 
                 </tr>
-              ))}
-          </tbody>
-         
-        </table>
+              </thead>
+              <tbody>
+                {/* row 1 */}
+                {
+                  notifications.map((order, idx) => (
+                    <tr key={idx}>
+                      <td>
+                        <div>
+                          <p className="font-bold">#{order?.order_id}</p>
+                        </div>
+                      </td>
 
-        <button
-                onClick={clearNotifications}
-                className="text-xs text-blue-600 hover:underline"
-             >
-              Clear All
-             </button>
+                      <td>
+                        <div className="flex items-center gap-5">
+                          <div>
+                            <div className="font-bold">{order?.customer_name}</div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <span className="badge badge-success text-white badge-sm">
+                          {order?.status}
+                        </span>
+                      </td>
+
+                      <td>
+                        <p>{order?.total}</p>
+                      </td>
+
+                      <td>
+                        <p>{new Date(Date.parse(order?.created_at)).toLocaleString()} </p>
+                      </td>
+                      <td>
+                        <button onClick={() => deleteNotification(order.id)} className=' rounded-md border border-transparent bg-secondary  px-10 py-2 my-1 text-md font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last'>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>}
       </div>
-    </div>
-
-
-
-
-
-
-
-
-        // <span className="text-2xl">🔔</span>
-        // <div className="absolute  mt-2 w-80 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-        //   <div className="p-2 max-h-64 overflow-y-auto text-sm">
-        //     {notifications.length === 0 ? (
-        //       <div className="text-gray-500">No new notifications</div>
-        //     ) : (
-        //       notifications.map((order, idx) => (
-        //         <div key={idx} className="p-2 hover:bg-gray-100 border-b text-gray-800">
-        //           <strong>Order #{order.orderId}</strong> for <em>{order.name}</em><br />
-        //           Status: <span className="font-semibold">{order.newStatus}</span> <br />
-        //           Total: ₹{order.total}
-        //         </div>
-        //       ))
-        //     )}
-        //   </div>
-
-        //   {notifications.length > 0 && (
-        //     <div className="p-2 text-right border-t">
-        //       <button
-        //         onClick={clearNotifications}
-        //         className="text-xs text-blue-600 hover:underline"
-        //       >
-        //         Clear All
-        //       </button>
-        //     </div>
-        //   )}
-        // </div>
-      
-    
+    </>
   );
 }

@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -58,33 +58,55 @@ app.get('/', (req, res) => {
 // Store last known statuses
 let lastStatuses = {};
 
-io.on('connection', (socket) => {
-  console.log('🟢 New client connected');
-});
-
-// Poll every 5 seconds for status changes
+// Poll every 5 seconds
 setInterval(() => {
-  db.query('SELECT id, status,name,total FROM customer_order', (err, results) => {
-    if (err) return console.error('MySQL Query Error:', err);
+  db.query(
+    `SELECT id, status, total, name
+     FROM customer_order`,
+    (err, results) => {
+      if (err) return console.error('MySQL Query Error:', err);
 
-    results.forEach((order) => {
-      const prevStatus = lastStatuses[order.id];
+      results.forEach((order) => {
+        const prevStatus = lastStatuses[order.id];
 
-      if (prevStatus !== undefined && prevStatus !== order.status) {
-        console.log(`📢 Order ${order.id} status changed: ${prevStatus} → ${order.status}`);
+        // If status changed
+        if (prevStatus !== undefined && prevStatus !== order.status) {
+          console.log(`📢 Order ${order.id} status changed: ${prevStatus} → ${order.status}`);
 
-        io.emit('orderStatusChanged', {
-          orderId: order.id,
-          newStatus: order.status,
-          name: order.name,
-          total: order.total,
-        });
-      }
+          const notification = {
+            orderId: order.id,
+            newStatus: order.status,
+            name: order.name,
+            total: order.total,
+          };
 
-      lastStatuses[order.id] = order.status;
-    });
-  });
+          // Emit to frontend
+          io.emit('orderStatusChanged', notification);
+
+          // Save to DB
+          db.query(
+            `INSERT INTO notifications (order_id, customer_name, status, total)
+            VALUES (?, ?, ?, ?)`,
+            [
+              notification.orderId,
+              notification.name,
+              notification.newStatus,
+              notification.total,
+
+            ],
+            (err) => {
+              if (err) console.error('❌ Error inserting notification:', err);
+            }
+          );
+        }
+
+        // Save current status
+        lastStatuses[order.id] = order.status;
+      });
+    }
+  );
 }, 5000);
+
 
 app.use(fileUpload());
 
@@ -98,6 +120,8 @@ app.use("/api/orders", orderRouter);
 app.use('/api/order-product', orderProductRouter);
 app.use("/api/slugs", slugRouter);
 app.use("/api/wishlist", wishlistRouter);
+const notifications = require('./routes/notifications')(db);
+app.use("/api/notifications", notifications);
 
 
 const PORT = process.env.PORT || 3001;

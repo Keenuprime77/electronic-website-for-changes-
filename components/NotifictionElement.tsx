@@ -12,30 +12,54 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { FaBell } from 'react-icons/fa6'
-import { useProductStore } from "@/app/_zustand/store";
 import io from 'socket.io-client';
+
+import { useNotificationStore } from '@/app/_zustand/useNotification';
+
+
 
 const socket = io('http://localhost:3001');
 
-interface OrderNotification {
-  orderId: number;
-  newStatus: string;
-  name: string;
+interface Notification {
+  id: number;
+  order_id: number;
+  customer_name: string;
+  status: string;
   total: number;
+  created_at: string;
 }
 
 const NotificationElement = () => {
-  const [notifications, setNotifications] = useState<OrderNotification[]>([]);
+
+  const notifications = useNotificationStore((state) => state.notifications);
+  const setNotifications = useNotificationStore((state) => state.setNotifications);
+  const addNotification = useNotificationStore((state) => state.addNotification);
+  
+  useEffect(() => {
+    fetch('http://localhost:3001/api/notifications')
+      .then((res) => res.json())
+      .then((data) => setNotifications(data));
+  }, []);
 
     useEffect(() => {
-      socket.on('orderStatusChanged', (data: OrderNotification) => {
-        setNotifications((prev) => [...prev, data]);
-      });
-  
+        socket.on('orderStatusChanged', (data) => {
+          addNotification(
+            {
+              id: Date.now(),
+              order_id: data.orderId,
+              customer_name: data.customer,
+              status: data.newStatus,
+              total: data.total,
+              created_at: new Date().toLocaleString(),
+            },
+          );
+        });
       return () => {
-        socket.off('orderStatusChanged');
-      };
-    }, []);
+      socket.off('orderStatusChanged');
+    };
+  }, []);
+
+
   return (
     <div className="relative active:animate-pop">
             <Link href="/Notification">

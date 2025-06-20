@@ -164,7 +164,6 @@ const Header = () => {
             />
           </Link>
           <div className="flex gap-x-5 items-center">
-            <FaBell className="text-xl" />
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10 active:animate-pop">
               <FaUser className="text-2xl text-black" />
