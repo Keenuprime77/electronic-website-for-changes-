@@ -34,6 +34,10 @@ CREATE TABLE `User` (
     `password` VARCHAR(191) NULL,
     `address` VARCHAR(191) NOT NULL,
     `phone` VARCHAR(191) NOT NULL,
+    `apartment` VARCHAR(191) NOT NULL,
+    `city` VARCHAR(191) NOT NULL,
+    `country` VARCHAR(191) NOT NULL,
+    `postalCode` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)

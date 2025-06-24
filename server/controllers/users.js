@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
+const { PrismaClientKnownRequestError } = require("@prisma/client/runtime/library");
 
 async function getAllUsers(request, response) {
   try {
@@ -13,8 +14,7 @@ async function getAllUsers(request, response) {
 
 async function createUser(request, response) {
   try {
-    console.log("Request body:", request.body);
-    const { firstname, lastname, email, password, address, phone, role, } = request.body;
+    const { firstname, lastname, email, password, address, phone, apartment, city, country, postalCode, role, } = request.body;
     const hashedPassword = await bcrypt.hash(password, 5);
 
     const user = await prisma.user.create({
@@ -25,12 +25,23 @@ async function createUser(request, response) {
         password: hashedPassword,
         address,
         phone,
+        apartment,
+        city,
+        country,
+        postalCode,
         role,
       },
     });
     return response.status(201).json(user);
+
   } catch (error) {
-    console.error("Error creating user:", error);
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === "P2002" &&
+      error.meta?.target?.includes("email")
+    ) {
+      return response.status(400).json({ error: "Email already registered" });
+    }
     return response.status(500).json({ error: "Error creating user" });
   }
 }
@@ -38,7 +49,7 @@ async function createUser(request, response) {
 async function updateUser(request, response) {
   try {
     const { id } = request.params;
-    const { firstname, lastname, email, password, address, phone, role, } = request.body;
+    const { firstname, lastname, email, password, address, phone, role, apartment, city, country, postalCode, } = request.body;
     const hashedPassword = await bcrypt.hash(password, 5);
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -62,6 +73,10 @@ async function updateUser(request, response) {
         address,
         phone,
         role,
+        apartment,
+        city,
+        country,
+        postalCode,
       },
     });
 

@@ -47,9 +47,17 @@ const Header = () => {
       image: string;
       slug:string
       stockAvailabillity: number;
+      quantity: number;
     }[] = [];
     
-    wishlist.map((item: any) => productArray.push({id: item?.product?.id, title: item?.product?.title, price: item?.product?.price, image: item?.product?.mainImage, slug: item?.product?.slug, stockAvailabillity: item?.product?.inStock}));
+    wishlist.map((item: any) => productArray.push({id: item?.product?.id,
+       title: item?.product?.title,
+        price: item?.product?.price, 
+        image: item?.product?.mainImage, 
+        slug: item?.product?.slug,
+         stockAvailabillity: item?.product?.inStock,
+         quantity:item?.product?.quantity
+        }));
     
     setWishlist(productArray);
   };
@@ -85,23 +93,21 @@ const Header = () => {
             <HeartElement wishQuantity={wishQuantity} />
             <CartElement />
             <NotificationElement/>
-            <div className="dropdown dropdown-end active:animate-pop">
+            <div className="dropdown dropdown-end ">
               <div tabIndex={0} role="button"  className="mt-[12%] w-10">
-                {/* <Image
-                  src="/randomuser.jpg"
-                  alt="random profile photo"
-                  width={30}
-                  height={30}
-                  className="w-full h-full rounded-full"
-                /> */}
-                <FaUser className="text-2xl text-black " />
+                <FaUser className="text-2xl text-black active:animate-pop " />
               </div>
               <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              tabIndex={0}
+                className="dropdown-content z-[1] active:animate-pop menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <Link href="/Userprofile">Profile</Link>
+                  <Link   href="/Yourorders">
+                  Your Orders
+                  </Link>
+                </li>
+                <li>
+                  <Link tabIndex={2} href="/Userprofile">Profile</Link>
                 </li>
                 <li onClick={handleLogout}>
                   <a href="#">Logout</a>

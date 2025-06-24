@@ -4,7 +4,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { useProductStore } from "../_zustand/store";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { isValidEmailAddressFormat, isValidNameOrLastname, isValidPhoneFormat } from "@/lib/utils";
@@ -35,7 +35,7 @@ const CheckoutPage = () => {
     getUserByEmail();
   }, [session?.user?.email]);
 
-  const handleAddress=(e)=>{
+  const handleAddress=(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>)=>{
     e.preventDefault();
 setCheckoutForm({...checkoutForm,adress:user.address})
   }

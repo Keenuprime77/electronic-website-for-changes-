@@ -1,11 +1,9 @@
 "use client";
 import { CustomButton, SectionTitle } from "@/components";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useProductStore } from "../_zustand/store";
 
 const RegisterPage = () => {
 
@@ -33,6 +31,10 @@ const RegisterPage = () => {
     const confirmPassword = e.target.confirmpassword.value;
     const address = e.target.address.value;
     const phone = e.target.phone.value;
+    const apartment = e.target.apartment.value;
+    const city = e.target.city.value;
+    const country = e.target.country.value;
+    const postalCode = e.target.postalCode.value;
 
     if (!isValidEmail(email)) {
       setError("Email is invalid");
@@ -54,7 +56,7 @@ const RegisterPage = () => {
 
     try {
       // sending API request for registering user
-      const res = await fetch("/api/register", {
+      const res = await fetch("http://localhost:3001/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,14 +68,20 @@ const RegisterPage = () => {
           password,
           address,
           phone,
+          apartment,
+          city,
+          country,
+          postalCode,
         }),
       });
+
+
 
       if (res.status === 400) {
         toast.error("This email is already registered");
         setError("The email already in use");
       }
-      if (res.status === 200) {
+      if (res.status === 201) {
         setError("");
         toast.success("Registration successful");
         router.push("/login");
@@ -248,7 +256,7 @@ const RegisterPage = () => {
                   htmlFor="phone"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Phone
+                    Phone
                 </label>
                 <div className="mt-2">
                   <input
@@ -257,29 +265,87 @@ const RegisterPage = () => {
                     type="phone"
                     autoComplete="phone"
                     required
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="apartment"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                    Apartment, suite, etc.
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="apartment"
+                    name="apartment"
+                    type="apartment"
+                    
+                    autoComplete="apartment"
+                    required
                     
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
+              <div>
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  City
+                </label>
+                <div className="mt-2">
                   <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
+                    id="city"
+                    name="city"
+                    
+                    autoComplete="city"
+                    required
+                    
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-3 block text-sm leading-6 text-gray-900"
-                  >
-                    Accept our terms and privacy policy
-                  </label>
                 </div>
               </div>
-
+              <div>
+                <label
+                  htmlFor="country"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Country
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="country"
+                    name="country"
+                    
+                    autoComplete="country"
+                    required
+                    
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="postalCode"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Postal code
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="postalCode"
+                    name="postalCode"
+                    
+                    autoComplete="postalCode"
+                    required
+                    
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
               <div>
                
                 <CustomButton

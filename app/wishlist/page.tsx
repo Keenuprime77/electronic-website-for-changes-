@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 
 const WishlistPage = () => {
   const { data: session, status } = useSession();
-  const {wishlist, setWishlist}= useWishlistStore();
+  const { wishlist, setWishlist } = useWishlistStore();
 
   const getWishlistByUserId = async (id: string) => {
     const response = await fetch(`http://localhost:3001/api/wishlist/${id}`, {
@@ -22,12 +22,21 @@ const WishlistPage = () => {
       title: string;
       price: number;
       image: string;
-      slug:string
+      slug: string;
       stockAvailabillity: number;
+      quantity: 1
     }[] = [];
-    
-    wishlist.map((item:any) => productArray.push({id: item?.product?.id, title: item?.product?.title, price: item?.product?.price, image: item?.product?.mainImage, slug: item?.product?.slug, stockAvailabillity: item?.product?.inStock}));
-    
+
+    wishlist.map((item: any) => productArray.push({
+      id: item?.product?.id,
+       title: item?.product?.title,
+        price: item?.product?.price,
+         image: item?.product?.mainImage,
+         slug: item?.product?.slug, 
+         stockAvailabillity: item?.product?.inStock,
+         quantity:item?.product?.quantity,
+         }));
+
     setWishlist(productArray);
   };
 
@@ -76,8 +85,7 @@ const WishlistPage = () => {
                       image={item?.image}
                       slug={item?.slug}
                       stockAvailabillity={item?.stockAvailabillity}
-                      key={nanoid()}
-                    />
+                      key={nanoid()} quantity={0} />
                   ))}
               </tbody>
             </table>

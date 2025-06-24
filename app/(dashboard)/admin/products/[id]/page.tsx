@@ -232,7 +232,7 @@ const DashboardProductDetails = ({
         {/* Product slug input div - end */}
         {/* Product inStock select input div - start */}
 
-               {/* Product inStock select input div - end */}
+        {/* Product inStock select input div - end */}
         {/* Product category select input div - start */}
         <div>
           <label className="form-control w-full max-w-xs">
@@ -266,13 +266,14 @@ const DashboardProductDetails = ({
             type="file"
             className="file-input file-input-bordered file-input-lg w-full max-w-sm"
             onChange={(e) => {
-              const selectedFile = e.target.files[0];
-
-              if (selectedFile) {
+              const files = e.target.files;
+              if (files && files.length > 0) {
+                const selectedFile = files[0];
                 uploadFile(selectedFile);
                 setProduct({ ...product!, mainImage: selectedFile.name });
               }
             }}
+
           />
           {product?.mainImage && (
             <Image
@@ -315,15 +316,15 @@ const DashboardProductDetails = ({
             ></textarea>
           </label>
         </div>
-        
-   
+
+
         <div className="flex gap-x-2 max-sm:flex-col">
           <button
             type="button"
             onClick={updateProduct}
             className="uppercase rounded-[37px] bg-secondary px-10 py-5 text-lg border border-black border-gray-300 font-bold text-tertiary shadow-sm hover:bg-tertiary hover:text-secondary focus:outline-none focus:ring-2"
           >
-          Update product
+            Update product
           </button>
           <button
             type="button"
