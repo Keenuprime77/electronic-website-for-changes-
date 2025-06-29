@@ -10,7 +10,10 @@ import RouteChangeHandler from '@/components/RouteChangeHandler';
 import LinkInterceptor from '@/components/LinkInterceptor';
 import { LoaderProvider } from '@/context/LoaderContext';
 import Loading from '@/components/loading';
-import OrderStatusNotification from './Notification/page';
+// _app.tsx or _document.tsx (inside <Head>)
+import Script from "next/script";
+import Head from "next/head";
+
 
 
 
@@ -30,22 +33,27 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="en" data-theme="light">
+
       <body className={inter.className}>
-        
-      <SessionProvider session={session}>
-        <Header />
-        <Providers>
-      <LoaderProvider>
-      <LinkInterceptor />
-      <RouteChangeHandler />
-      <Loading/>
-   
-        {children}
-        </LoaderProvider>
-        </Providers>
-        <Footer />
-      </SessionProvider>
-        </body>
+         <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="beforeInteractive"
+      />
+
+        <SessionProvider session={session}>
+          <Header />
+          <Providers>
+            <LoaderProvider>
+              <LinkInterceptor />
+              <RouteChangeHandler />
+              <Loading />
+
+              {children}
+            </LoaderProvider>
+          </Providers>
+          <Footer />
+        </SessionProvider>
+      </body>
     </html>
   );
 }

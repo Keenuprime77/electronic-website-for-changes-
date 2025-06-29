@@ -62,7 +62,7 @@ hover:text-secondary  rounded-[34px]  font-bold px-12 py-3 max-lg:text-xl max-sm
           </p>
           <div className="flex gap-x-1 max-lg:flex-col max-lg:gap-y-1 active:animate-pop">
 
-            <Link href="/product/smart-watch-demo" className="bg-secondary rounded-[34px] border-2 border-primary text-tertiary font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-tertiary hover:text-secondary ">
+            <Link href="/product/notebook-horizon-demo" className="bg-secondary rounded-[34px] border-2 border-primary text-tertiary font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-tertiary hover:text-secondary ">
               BUY NOW
             </Link>
             <button className="bg-secondary border-2 ml-[3%] border-primary text-tertiary
@@ -94,7 +94,7 @@ hover:text-secondary  rounded-[34px]  font-bold px-12 py-3 max-lg:text-xl max-sm
           </p>
           <div className="flex gap-x-1 max-lg:flex-col max-lg:gap-y-1 active:animate-pop">
 
-            <Link href="/product/smart-watch-demo" className="bg-secondary rounded-[34px] border-2 border-primary text-tertiary font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-tertiary hover:text-secondary ">
+            <Link href="/product/wireless-headphones-demo" className="bg-secondary rounded-[34px] border-2 border-primary text-tertiary font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-tertiary hover:text-secondary ">
               BUY NOW
             </Link>
             <button className="bg-secondary border-2 ml-[3%] border-primary text-tertiary
@@ -126,7 +126,7 @@ hover:text-secondary  rounded-[34px]  font-bold px-12 py-3 max-lg:text-xl max-sm
           </p>
           <div className="flex gap-x-1 max-lg:flex-col max-lg:gap-y-1 active:animate-pop">
 
-            <Link href="/product/smart-watch-demo" className="bg-secondary rounded-[34px] border-2 border-primary text-tertiary font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-tertiary hover:text-secondary ">
+            <Link href="/product/smart-phone-demo" className="bg-secondary rounded-[34px] border-2 border-primary text-tertiary font-bold px-12 py-3 max-lg:text-xl max-sm:text-lg hover:bg-tertiary hover:text-secondary ">
               BUY NOW
             </Link>
             <button className="bg-secondary border-2 ml-[3%] border-primary text-tertiary

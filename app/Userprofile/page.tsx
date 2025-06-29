@@ -17,6 +17,10 @@ const UserProfile = () => {
     email: '',
     phone: '',
     address: '',
+    apartment: '',
+    city: '',
+    country: '',
+    postalCode: '',
   });
 
   const handleUpdate = async () => {
@@ -169,6 +173,82 @@ const UserProfile = () => {
                     required
                     onChange={(e) => setUser({ ...user, address: e.target.value })}
                     value={user.address}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="apartment"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                    Apartment, suite, etc.
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="apartment"
+                    name="apartment"
+                    type="text"
+                    required
+                    onChange={(e) => setUser({ ...user, apartment: e.target.value })}
+                    value={user.apartment}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  City
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="city"
+                    name="city"
+                    type="text"
+                    required
+                    onChange={(e) => setUser({ ...user, city: e.target.value })}
+                    value={user.city}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="country"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Country
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="country"
+                    name="country"
+                    type="text"
+                    required
+                    onChange={(e) => setUser({ ...user, country: e.target.value })}
+                    value={user.country}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="postalCode"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Postal Code
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="postalCode"
+                    name="postalCode"
+                    type="text"
+                    required
+                    onChange={(e) => setUser({ ...user, postalCode: e.target.value })}
+                    value={user.postalCode}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>

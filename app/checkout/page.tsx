@@ -7,15 +7,31 @@ import Image from "next/image";
 import { MouseEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { isValidEmailAddressFormat, isValidNameOrLastname, isValidPhoneFormat } from "@/lib/utils";
 import { useSession } from 'next-auth/react';
+// _app.tsx or _document.tsx (inside <Head>)
+import Head from "next/head";
+import { POST } from "../api/create-order/route";
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
 
 const CheckoutPage = () => {
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
+  const [useDefaultAddress, setUseDefaultAddress] = useState(false);
 
   const [user, setUser] = useState({
     address: '',
+    apartment: '',
+    city: '',
+    country: '',
+    postalCode: '',
   });
 
   const getUserByEmail = async () => {
@@ -35,11 +51,8 @@ const CheckoutPage = () => {
     getUserByEmail();
   }, [session?.user?.email]);
 
-  const handleAddress=(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>)=>{
-    e.preventDefault();
-setCheckoutForm({...checkoutForm,adress:user.address})
-  }
-  
+
+
   const [checkoutForm, setCheckoutForm] = useState({
     name: "",
     lastname: "",
@@ -56,129 +69,197 @@ setCheckoutForm({...checkoutForm,adress:user.address})
   const { products, total, clearCart } = useProductStore();
   const router = useRouter();
 
-  const makePurchase = async () => {
-    if (loading) return; // prevent double clicks
-    setLoading(true); 
 
-    if (
-      checkoutForm.name.length > 0 &&
-      checkoutForm.lastname.length > 0 &&
-      checkoutForm.phone.length > 0 &&
-      checkoutForm.email.length > 0 &&
-      checkoutForm.company.length > 0 &&
-      checkoutForm.adress.length > 0 &&
-      checkoutForm.apartment.length > 0 &&
-      checkoutForm.city.length > 0 &&
-      checkoutForm.country.length > 0 &&
-      checkoutForm.postalCode.length > 0
-    ) {
-      if (!isValidNameOrLastname(checkoutForm.name)) {
-        toast.error("You entered invalid format for name");
-        setLoading(false)
-        return;
-      }
+  const handlePayment = async () => {
+  if (loading) return;
+  setLoading(true);
 
-      if (!isValidNameOrLastname(checkoutForm.lastname)) {
-        toast.error("You entered invalid format for lastname");
-        setLoading(false)
-        return;
-      }
+  // ✅ Step 1: Validate all fields
+  if (
+    checkoutForm.name.length > 0 &&
+    checkoutForm.lastname.length > 0 &&
+    checkoutForm.phone.length > 0 &&
+    checkoutForm.email.length > 0 &&
+    checkoutForm.company.length > 0 &&
+    checkoutForm.adress.length > 0 &&
+    checkoutForm.apartment.length > 0 &&
+    checkoutForm.city.length > 0 &&
+    checkoutForm.country.length > 0 &&
+    checkoutForm.postalCode.length > 0
+  ) {
+    if (!isValidNameOrLastname(checkoutForm.name)) {
+      toast.error("You entered invalid format for name");
+      setLoading(false);
+      return;
+    }
 
-      if (!isValidEmailAddressFormat(checkoutForm.email)) {
-        toast.error("You entered invalid format for email address");
-        setLoading(false)
-        return;
-      }
-      
-      if (!isValidPhoneFormat(checkoutForm.phone)) {
-        toast.error("You entered invalid format for phone number");
-        setLoading(false)
-        return;
-      }
-      
+    if (!isValidNameOrLastname(checkoutForm.lastname)) {
+      toast.error("You entered invalid format for lastname");
+      setLoading(false);
+      return;
+    }
 
+    if (!isValidEmailAddressFormat(checkoutForm.email)) {
+      toast.error("You entered invalid format for email address");
+      setLoading(false);
+      return;
+    }
 
-      // sending API request for creating a order
-      const response = fetch("http://localhost:3001/api/orders", {
+    if (!isValidPhoneFormat(checkoutForm.phone)) {
+      toast.error("You entered invalid format for phone number");
+      setLoading(false);
+      return;
+    }
+
+        const outOfStockProducts: string[] = [];
+
+    for (let i = 0; i < products.length; i++) {
+      const stockCheck = await fetch("/api/check-stock", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: checkoutForm.name,
-          lastname: checkoutForm.lastname,
-          phone: checkoutForm.phone,
-          email: checkoutForm.email,
-          company: checkoutForm.company,
-          adress: checkoutForm.adress,
-          apartment: checkoutForm.apartment,
-          postalCode: checkoutForm.postalCode,
-          status: "processing",
-          total: total,
-          city: checkoutForm.city,
-          country: checkoutForm.country,
-          orderNotice: checkoutForm.orderNotice,
-          productId: products[0].id,
-          quantity: products[0].amount
+          productId: products[i].id,
+          quantity: products[i].amount,
         }),
-      })
-        .then(async (res) => {
-          setLoading(false)
-          if (!res.ok) {
-            const errorData = await res.json();
-            throw new Error(errorData.error || 'Something went wrong');
-          }
-          return res.json()
-        })
-        .then(async (data) => {
-          const orderId: string = await data.id;
-          // for every product in the order we are calling addOrderProduct function that adds fields to the customer_order_product table
-          for (let i = 0; i < products.length; i++) {
-            let productId: string = products[i].id;
-            addOrderProduct(orderId, products[i].id, products[i].amount);
-          }
-        })
-        .then(() => {
-          setCheckoutForm({
-            name: "",
-            lastname: "",
-            phone: "",
-            email: "",
-            company: "",
-            adress: "",
-            apartment: "",
-            city: "",
-            country: "",
-            postalCode: "",
-            orderNotice: "",
-          });
-          clearCart();
-          toast.success("Order created successfuly");
-          setTimeout(() => {
-            router.push("/");
-          }, 1000);
-        }).catch(err => {
-          toast.error(`Order failed: ${err.message}`);
-          setTimeout(() => {
-            router.push("/");
-          }, 1000);
-        });
-    } else {
-      setLoading(false)
-      toast.error("You need to enter values in the input fields");
-    }
-    
-        
-  };
+      });
 
+      const stockData = await stockCheck.json();
+
+      if (!stockCheck.ok) {
+        outOfStockProducts.push(products[i].title || `Product ID: ${products[i].id}`);
+      }
+    }
+
+    if (outOfStockProducts.length > 0) {
+      toast.error(`Out of stock: ${outOfStockProducts.join(", ")}`);
+      setLoading(false);
+      return;
+    }
+
+     const tax = total / 5;
+  const shipping = 5;
+  const finalAmount = Math.round(total + tax + shipping)
+    
+    // ✅ Step 2: Create Razorpay Order
+    try {
+      const orderRes = await fetch("/api/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: finalAmount }),
+      });
+
+      const orderData = await orderRes.json();
+      if (!orderRes.ok)
+        throw new Error(orderData.error || "Failed to create Razorpay order");
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: orderData.finalAmount,
+        currency: "INR",
+        name: "Singitronic",
+        description: "Product Purchase",
+        image: "/logo v1 red.png",
+        order_id: orderData.id,
+        handler: async function (response: any) {
+          // ✅ Payment successful — create order
+          try {
+            const orderRes = await fetch("http://localhost:3001/api/orders", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: checkoutForm.name,
+                lastname: checkoutForm.lastname,
+                phone: checkoutForm.phone,
+                email: checkoutForm.email,
+                company: checkoutForm.company,
+                adress: checkoutForm.adress,
+                apartment: checkoutForm.apartment,
+                postalCode: checkoutForm.postalCode,
+                status: "processing",
+                total: finalAmount,
+                city: checkoutForm.city,
+                country: checkoutForm.country,
+                orderNotice: checkoutForm.orderNotice,
+                productId: products[0].id,
+                quantity: products[0].amount,
+              }),
+            });
+
+            if (!orderRes.ok) {
+              const errorData = await orderRes.json();
+              throw new Error(errorData.error || "Order save failed");
+            }
+
+            const savedOrder = await orderRes.json();
+            const orderId = savedOrder.id;
+
+            for (let i = 0; i < products.length; i++) {
+              await addOrderProduct(orderId, products[i].id, products[i].amount);
+            }
+
+            setCheckoutForm({
+              name: "",
+              lastname: "",
+              phone: "",
+              email: "",
+              company: "",
+              adress: "",
+              apartment: "",
+              city: "",
+              country: "",
+              postalCode: "",
+              orderNotice: "",
+            });
+
+            clearCart();
+            toast.success("Order placed successfully!");
+            router.push("/");
+          } catch (err: any) {
+            toast.error("Payment successful, but order saving failed.");
+            console.error(err.message);
+          }
+        },
+        prefill: {
+          name: checkoutForm.name,
+          email: checkoutForm.email,
+          contact: checkoutForm.phone,
+        },
+        notes: {
+          address: checkoutForm.adress,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+      rzp.on("payment.failed", function (response: any) {
+        toast.error("Payment failed. Please try again.");
+        console.error(response.error);
+      });
+    } catch (error: any) {
+      toast.error(`Error: ${error.message}`);
+    }
+  } else {
+    toast.error("Please fill all required fields");
+  }
+  setLoading(false);
+};
+
+
+  // ✅ Helper to save product-order relationship
   const addOrderProduct = async (
     orderId: string,
     productId: string,
     productQuantity: number
   ) => {
-    // sending API POST request for the table customer_order_product that does many to many relatioship for order and product
-    const response = await fetch("http://localhost:3001/api/order-product", {
-      method: "POST", // or 'PUT'
+    await fetch("http://localhost:3001/api/order-product", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -190,17 +271,18 @@ setCheckoutForm({...checkoutForm,adress:user.address})
     });
   };
 
-
-
-  useEffect(() => {
-    if (products.length === 0) {
-      toast.error("You don't have items in your cart");
-      router.push("/cart");
-    }
-  }, []);
+ useEffect(() => {
+   if (products.length === 0) {
+     toast.error("You don't have items in your cart");
+     router.push("/cart");
+   }
+ }, []);
 
   return (
     <div className="bg-white">
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
       <SectionTitle title="Checkout" path="Home | Cart | Checkout" />
       {/* Background color split screen for large screens */}
       <div
@@ -331,7 +413,7 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                 </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 ">
                 <label
                   htmlFor="lastname-input"
                   className="block text-sm font-medium text-gray-700"
@@ -379,16 +461,6 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                 >
                   Phone number
                 </label>
-
-                {/* <input
-                  type="tel"
-                  name="tel"
-                  autoComplete="tel"
-                
-                  
-                /> */}
-
-
                 <div className="mt-1">
                   <PhoneInput
                     value={checkoutForm.phone}
@@ -473,7 +545,41 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                   </div>
                 </div>
 
-                <div className="sm:col-span-3">
+                <label className="flex items-center gap-2 mt-2">
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-secondary"
+                    checked={useDefaultAddress}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      setUseDefaultAddress(isChecked);
+
+                      if (isChecked) {
+                        setCheckoutForm((prev) => ({
+                          ...prev,
+                          adress: user.address,
+                          apartment: user.apartment,
+                          city: user.city,
+                          postalCode: user.postalCode,
+                          country: user.country,
+                        }));
+                      } else {
+                        setCheckoutForm((prev) => ({
+                          ...prev,
+                          adress: "",
+                          apartment: "",
+                          city: "",
+                          postalCode: "",
+                          country: "",
+                        }));
+                      }
+                    }}
+                  />
+                  <span className="text-sm text-gray-700">Use default address</span>
+                </label>
+                <div
+                  className={`${useDefaultAddress ? "hidden" : "sm:col-span-3"}`}
+                >
                   <label
                     htmlFor="address"
                     className="block text-sm font-medium text-gray-700"
@@ -495,13 +601,12 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                         })
                       }
                     />
-                   
-                    
-                    <button className=" rounded-md border border-transparent bg-secondary  px-10 py-2 my-1 text-md font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last" onClick={(e)=>handleAddress(e)} >Default Address</button>
                   </div>
                 </div>
 
-                <div className="sm:col-span-3">
+
+
+                <div className={`${useDefaultAddress ? "hidden" : "sm:col-span-3"}`}>
                   <label
                     htmlFor="apartment"
                     className="block text-sm font-medium text-gray-700"
@@ -526,7 +631,7 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                   </div>
                 </div>
 
-                <div>
+                <div className={`${useDefaultAddress ? "hidden" : "sm:col-span-3"}`}>
                   <label
                     htmlFor="city"
                     className="block text-sm font-medium text-gray-700"
@@ -551,7 +656,7 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                   </div>
                 </div>
 
-                <div>
+                <div className={`${useDefaultAddress ? "hidden" : "sm:col-span-3"}`}>
                   <label
                     htmlFor="region"
                     className="block text-sm font-medium text-gray-700"
@@ -576,7 +681,7 @@ setCheckoutForm({...checkoutForm,adress:user.address})
                   </div>
                 </div>
 
-                <div>
+                <div className={`${useDefaultAddress ? "hidden" : "sm:col-span-3"}`}>
                   <label
                     htmlFor="postal-code"
                     className="block text-sm font-medium text-gray-700"
@@ -630,18 +735,18 @@ setCheckoutForm({...checkoutForm,adress:user.address})
             <div className="mt-10 border-t border-gray-200 pt-6 ml-0">
               <button
                 type="button"
-                onClick={makePurchase}
+                onClick={handlePayment}
                 disabled={loading}
                 className=" w-full rounded-md border border-transparent bg-secondary px-20 py-2 text-lg font-medium text-tertiary shadow-sm hover:bg-tertiary hover:border-secondary hover:text-secondary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-gray-50 sm:order-last"
               >
-                 {loading?<div
+                {loading ? <div
                   className="spinner"
                   role="status">
-                </div>:
-                <span>
-                  Pay Now
-                </span>
-}
+                </div> :
+                  <span>
+                    Pay Now
+                  </span>
+                }
               </button>
             </div>
           </div>

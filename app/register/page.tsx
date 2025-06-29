@@ -4,12 +4,16 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+
 
 const RegisterPage = () => {
 
   const [error, setError] = useState("");
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword(prev => !prev);
 
   useEffect(() => {
     // chechking if user has already registered redirect to home page
@@ -95,30 +99,30 @@ const RegisterPage = () => {
 
   if (sessionStatus === "loading") {
     return <>
-    <div className="preloader">
-	<svg className="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128" width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
-		<g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
-			<g className="cart__track" stroke="hsla(0,10%,10%,0.1)">
-				<polyline points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" />
-				<circle cx="43" cy="111" r="13" />
-				<circle cx="102" cy="111" r="13" />
-			</g>
-			<g className="cart__lines" stroke="currentColor">
-				<polyline className="cart__top" points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" stroke-dasharray="338 338" stroke-dashoffset="-338" />
-				<g className="cart__wheel1" transform="rotate(-90,43,111)">
-					<circle className="cart__wheel-stroke" cx="43" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
-				</g>
-				<g className="cart__wheel2" transform="rotate(90,102,111)">
-					<circle className="cart__wheel-stroke" cx="102" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
-				</g>
-			</g>
-		</g>
-	</svg>
-	<div className="preloader__text">
-		<p className="preloader__msg">Bringing you the goods…</p>
-		<p className="preloader__msg preloader__msg--last">This is taking long. Something’s wrong.</p>
-	</div>
-</div></>;
+      <div className="preloader">
+        <svg className="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128" width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+            <g className="cart__track" stroke="hsla(0,10%,10%,0.1)">
+              <polyline points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" />
+              <circle cx="43" cy="111" r="13" />
+              <circle cx="102" cy="111" r="13" />
+            </g>
+            <g className="cart__lines" stroke="currentColor">
+              <polyline className="cart__top" points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80" stroke-dasharray="338 338" stroke-dashoffset="-338" />
+              <g className="cart__wheel1" transform="rotate(-90,43,111)">
+                <circle className="cart__wheel-stroke" cx="43" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
+              </g>
+              <g className="cart__wheel2" transform="rotate(90,102,111)">
+                <circle className="cart__wheel-stroke" cx="102" cy="111" r="13" stroke-dasharray="81.68 81.68" stroke-dashoffset="81.68" />
+              </g>
+            </g>
+          </g>
+        </svg>
+        <div className="preloader__text">
+          <p className="preloader__msg">Bringing you the goods…</p>
+          <p className="preloader__msg preloader__msg--last">This is taking long. Something’s wrong.</p>
+        </div>
+      </div></>;
   }
 
 
@@ -141,13 +145,13 @@ const RegisterPage = () => {
                   htmlFor="firstname"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                 First Name
+                  First Name
                 </label>
                 <div className="mt-2">
                   <input
                     id="firstname"
                     name="firstname"
-                   
+
                     type="text"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -168,7 +172,7 @@ const RegisterPage = () => {
                     name="lastname"
                     type="text"
                     required
-                    
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -188,7 +192,7 @@ const RegisterPage = () => {
                     type="email"
                     autoComplete="email"
                     required
-                    
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -201,16 +205,27 @@ const RegisterPage = () => {
                 >
                   Password
                 </label>
-                <div className="mt-2">
+                <div className="mt-2 relative">
                   <input
                     id="password"
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+                  <button
+                    type="button"
+                    onClick={togglePassword}
+                    className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash className="h-5 w-5" />
+                    ) : (
+                      <FaEye className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -227,7 +242,7 @@ const RegisterPage = () => {
                     name="confirmpassword"
                     type="password"
                     autoComplete="current-password"
-                   
+
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -246,7 +261,7 @@ const RegisterPage = () => {
                     name="address"
                     type="address"
                     autoComplete="address"
-                 
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -256,7 +271,7 @@ const RegisterPage = () => {
                   htmlFor="phone"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                    Phone
+                  Phone
                 </label>
                 <div className="mt-2">
                   <input
@@ -274,17 +289,17 @@ const RegisterPage = () => {
                   htmlFor="apartment"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                    Apartment, suite, etc.
+                  Apartment, suite, etc.
                 </label>
                 <div className="mt-2">
                   <input
                     id="apartment"
                     name="apartment"
                     type="apartment"
-                    
+
                     autoComplete="apartment"
                     required
-                    
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -300,10 +315,10 @@ const RegisterPage = () => {
                   <input
                     id="city"
                     name="city"
-                    
+
                     autoComplete="city"
                     required
-                    
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -319,10 +334,10 @@ const RegisterPage = () => {
                   <input
                     id="country"
                     name="country"
-                    
+
                     autoComplete="country"
                     required
-                    
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -338,16 +353,16 @@ const RegisterPage = () => {
                   <input
                     id="postalCode"
                     name="postalCode"
-                    
+
                     autoComplete="postalCode"
                     required
-                    
+
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
               <div>
-               
+
                 <CustomButton
                   buttonType="submit"
                   text="Sign up"
